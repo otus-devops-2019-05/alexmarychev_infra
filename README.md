@@ -8,21 +8,21 @@ someinternalhost_IP = 10.132.0.3
 Для того, чтобы подключиться к someinternalhost в одну команду я сделал следующее:
 
 1. Сделал проброс с локальной машины до хоста bastion:
-ssh -i ~/.ssh/alexmar -AL 2222:localhost:2222 35.210.165.37 -l alexmar
+```ssh -i ~/.ssh/alexmar -AL 2222:localhost:2222 35.210.165.37 -l alexmar```
 
 2. Сделал проброс с хоста bastion до хоста someinternal:
-ssh -L 2222:localhost:22 10.132.0.3
+```ssh -L 2222:localhost:22 10.132.0.3```
 
 Таким образом на someinternal можно попасть непосредственно с локальной машины:
-ssh -p 2222 localhost
+```ssh -p 2222 localhost```
 
 Для использования алиаса для подключения по ssh, я выполнил следующее:
 
-1. Создал файл ~/.ssh/config
+1. Создал файл ```~/.ssh/config```
 2. Записал туда:
-	Host someinternalhost
+	```Host someinternalhost
 	Port 2222
-	HostName localhost
+	HostName localhost```
 Таким образом, на someinternalhost можно попасть командой ssh someinternalhost
 
 ########################################################################################
@@ -34,24 +34,45 @@ testapp_port = 9292
 
 1. Команда для передачи startup_script при создании инстанса:
 
---metadata-from-file startup-script=startup_script.sh
+```--metadata-from-file startup-script=startup_script.sh```
 
 Таким образом, общая команда создания инстанса будет выглядить так:
 
-gcloud compute instances create reddit-app \
+```gcloud compute instances create reddit-app \
 --boot-disk-size=10GB \
 --image-family ubuntu-1604-lts \
 --image-project=ubuntu-os-cloud \
 --machine-type=g1-small \
 --tags puma-server \
 --restart-on-failure \
---metadata-from-file startup-script=startup_script.sh
+--metadata-from-file startup-script=startup_script.sh```
 
 2. Команда для создания правила файерволла:
 
-gcloud compute firewall-rules create default-puma-server \
+```gcloud compute firewall-rules create default-puma-server \
 --allow=tcp:9292 \
---target-tags=puma-server
+--target-tags=puma-server```
 
+##########################################################################################
 
+#HW5
+
+1. Установил Packer и создал шаблон ubuntu16.json
+
+2. Создал файл с обязательными пользовательскими переменными variables.json:
+```"project_id": "infra-xxxxxx",
+"source_image_family": "ubuntu-1604-lts"```
+
+3. Добавил в шаблон ubuntu16.json переменную ```"machine_type": "f1-micro"```
+
+4. Добавил в шаблон ubuntu16.json следующие опции:
+```"disk_type": "pd-standard",
+"disk_size": "10",
+"network": "default",
+"tags": "puma-server"```
+
+5. Создал шаблон immutable.json и скрипт install_puma (лежит в директории scripts) для создания образа с уже предустановленным приложением puma-server.
+
+6. Создал скрипт create-redditvm.sh для создания инстанса с образом reddit-full.
+ 
 

@@ -1,6 +1,5 @@
 #!/bin/sh
-set -e
-cd ~
+cd /root
 git clone -b monolith https://github.com/express42/reddit.git
 cd reddit && bundle install
 cat > /etc/systemd/system/puma.service <<EOF
@@ -9,7 +8,7 @@ Description=Puma-Server
 After=network.target
 [Service]
 Type=simple
-WorkingDirectory=/home/alexmar/reddit/
+WorkingDirectory=/root/reddit/
 ExecStart=/usr/local/bin/puma
 Restart=always
 RestartSec=10
