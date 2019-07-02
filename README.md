@@ -20,10 +20,10 @@ someinternalhost_IP = 10.132.0.3
 
 1. Создал файл ```~/.ssh/config```
 2. Записал туда:
-	```Host someinternalhost
+	Host someinternalhost
 	Port 2222
 	HostName localhost
-```
+
 Таким образом, на someinternalhost можно попасть командой ssh someinternalhost
 
 ########################################################################################
@@ -39,7 +39,8 @@ testapp_port = 9292
 
 Таким образом, общая команда создания инстанса будет выглядить так:
 
-```gcloud compute instances create reddit-app \
+```
+gcloud compute instances create reddit-app \
 --boot-disk-size=10GB \
 --image-family ubuntu-1604-lts \
 --image-project=ubuntu-os-cloud \
@@ -51,7 +52,8 @@ testapp_port = 9292
 
 2. Команда для создания правила файерволла:
 
-```gcloud compute firewall-rules create default-puma-server \
+```
+gcloud compute firewall-rules create default-puma-server \
 --allow=tcp:9292 \
 --target-tags=puma-server
 ```
@@ -63,14 +65,16 @@ testapp_port = 9292
 1. Установил Packer и создал шаблон ubuntu16.json
 
 2. Создал файл с обязательными пользовательскими переменными variables.json:
-```"project_id": "infra-xxxxxx",
+```
+"project_id": "infra-xxxxxx",
 "source_image_family": "ubuntu-1604-lts"
 ```
 
 3. Добавил в шаблон ubuntu16.json переменную ```"machine_type": "f1-micro"```
 
 4. Добавил в шаблон ubuntu16.json следующие опции:
-```"disk_type": "pd-standard",
+```
+"disk_type": "pd-standard",
 "disk_size": "10",
 "network": "default",
 "tags": "puma-server"
