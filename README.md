@@ -20,10 +20,11 @@ someinternalhost_IP = 10.132.0.3
 
 1. Создал файл ```~/.ssh/config```
 2. Записал туда:
-	Host someinternalhost
-	Port 2222
-	HostName localhost
-
+```
+Host someinternalhost
+Port 2222
+HostName localhost
+```
 Таким образом, на someinternalhost можно попасть командой ssh someinternalhost
 
 ########################################################################################
