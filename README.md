@@ -22,7 +22,8 @@ someinternalhost_IP = 10.132.0.3
 2. Записал туда:
 	```Host someinternalhost
 	Port 2222
-	HostName localhost```
+	HostName localhost
+```
 Таким образом, на someinternalhost можно попасть командой ssh someinternalhost
 
 ########################################################################################
@@ -45,13 +46,15 @@ testapp_port = 9292
 --machine-type=g1-small \
 --tags puma-server \
 --restart-on-failure \
---metadata-from-file startup-script=startup_script.sh```
+--metadata-from-file startup-script=startup_script.sh
+```
 
 2. Команда для создания правила файерволла:
 
 ```gcloud compute firewall-rules create default-puma-server \
 --allow=tcp:9292 \
---target-tags=puma-server```
+--target-tags=puma-server
+```
 
 ##########################################################################################
 
@@ -61,7 +64,8 @@ testapp_port = 9292
 
 2. Создал файл с обязательными пользовательскими переменными variables.json:
 ```"project_id": "infra-xxxxxx",
-"source_image_family": "ubuntu-1604-lts"```
+"source_image_family": "ubuntu-1604-lts"
+```
 
 3. Добавил в шаблон ubuntu16.json переменную ```"machine_type": "f1-micro"```
 
@@ -69,7 +73,8 @@ testapp_port = 9292
 ```"disk_type": "pd-standard",
 "disk_size": "10",
 "network": "default",
-"tags": "puma-server"```
+"tags": "puma-server"
+```
 
 5. Создал шаблон immutable.json и скрипт install_puma (лежит в директории scripts) для создания образа с уже предустановленным приложением puma-server.
 
