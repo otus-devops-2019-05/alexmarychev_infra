@@ -1,0 +1,4 @@
+{
+"project_id": "infra-xxxxxx",
+"source_image_family": "ubuntu-1604-lts"
+}
