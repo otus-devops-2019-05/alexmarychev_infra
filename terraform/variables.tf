@@ -26,3 +26,8 @@ variable zone {
   description = "Zone for google_compute_instance"
   default     = "europe-west1-b"
 }
+
+variable "node_count" {
+  description = "google compute instance count"
+  default     = "1"
+}
