@@ -108,5 +108,95 @@ resource "google_compute_project_metadata_item" "default" {
 
 7. Описал создание нескольких инстансов через ```node_count```, создал переменную для измения этого параметра.
 
+###########################################################################################
+
+#HW7
+
+1. Создал ресурсы файерволла и ip-адреса.
+
+2. Разбил конфиг terraform на две VM
+
+3. Создал модули для создания VM базы, VM приложения и правила файерволла.
+
+4. Создал два storage-bucket
+
+5. Настроил хранение стейт файла в удаленном бекенде. Для этого создал отдельный файл backend.tf с содержимым:
+```
+terraform {
+  backend "gcs" {
+    bucket = "tested-bucket-1"
+  }
+}
+```
+Для PROD и 
+```
+terraform {
+  backend "gcs" {
+    bucket = "tested-bucket-2"
+  }
+}
+```
+Для STAGE
+
+tested-bucket-1 и tested-bucket-2 ранее содзданные storage-bucket
+
+6. Добавил provisioners в модули app и db для того, чтобы при создании инстансов сразу же разворачивалось бы приложение. 
+
+##модуль app:
+
+###параметры соединения для запуска provisioners:
+```
+connection {
+    type  = "ssh"
+    user  = "alexmar"
+    private_key = "${file(var.private_key_path)}"
+    host  = "${google_compute_address.app_ip.address}"
+  }
+```
+###сами provisioners:
+```
+provisioner "file" {
+      source      = "../modules/app/files/deploy.sh"
+      destination = "/tmp/deploy.sh"
+  }
+
+  provisioner "file" {
+      source      = "../modules/app/files/puma.service"
+      destination = "/tmp/puma.service"
+  }
+
+  provisioner "remote-exec" {
+      inline = [
+        "sed 's/Environment=/Environment=DATABASE_URL=${var.db_ip}:27017/' /tmp/puma.service -i",
+        "bash /tmp/deploy.sh",
+      ]
+  }
+```
+Сначала копируются файлы deploy.sh и puma.service, затем добавляем в юнит параметр с переменной окружения ```DATABASE_URL``` беря внутренний адрес БД из переменной ```var.db_ip```
+Затем выполняется скрипт deploy.sh
+
+##модуль db:
+
+###параметры соединения для запуска provisioners:
+```
+connection {
+    type  = "ssh"
+    user  = "alexmar"
+    private_key = "${file(var.private_key_path)}"
+    host  = "${google_compute_instance.db.network_interface.0.access_config.0.nat_ip}"
+  }
+```
+
+###сами provisioners:
+```
+provisioner "remote-exec" {
+      inline = [
+        "sudo sed 's/bindIp: 127.0.0.1/bindIp: ${google_compute_instance.db.network_interface.0.network_ip}/' /etc/mongod.conf -i",
+        "sudo systemctl restart mongod",
+      ]
+  }
+```
+Заменяем в файле конфигурации /etc/mongod.conf ip-адрес локалхоста на назначенный внутренний адрес инстанса. Затем рестартуем сервис mongodb.
+
 
 
