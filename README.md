@@ -212,9 +212,3 @@ HW8
 
 5. При выполнении ```ansible app -m command -a 'rm -rf ~/reddit'``` и новом запуске плейбука, мы видим, что changed=1. Это значит, что ansible что-то изменило на хосте, а именно создала удаленную нами директорию.
 
-6. Реализовал использование динамического inventory следующим образом:
-
-С помощью команды ```ansible-inventory -i ./inventory.yml --list``` получается вывод inventory.yml в виде json.
-Создаем скрипт inventory.sh с этой командой и прописываем его в ansible.cfg ```inventory = ./inventory.sh```.
-На лету генерируется json inventory и ansible использует его. Выполнение команды ```ansible all -m ping``` проходит успешно.
-
