@@ -15,7 +15,3 @@ variable private_key_path {
   description = "Path to the public key used to connect to instance"
 }
 
-variable db_ip {
-  description = "ip db"
-}
-

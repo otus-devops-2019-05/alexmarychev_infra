@@ -4,4 +4,6 @@
 *.tfvars
 .terraform/
 variables.json
+*.retry
+inventory.gcp.yml
 

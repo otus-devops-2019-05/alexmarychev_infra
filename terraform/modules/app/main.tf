@@ -22,29 +22,29 @@ resource "google_compute_instance" "app" {
     ssh-keys = "alexmar:${file(var.public_key_path)}"
   }
 
-  connection {
-    type  = "ssh"
-    user  = "alexmar"
-    private_key = "${file(var.private_key_path)}"
-    host  = "${google_compute_address.app_ip.address}"
-  }
-
-  provisioner "file" {
-      source      = "../modules/app/files/deploy.sh"
-      destination = "/tmp/deploy.sh"
-  }
-
-  provisioner "file" {
-      source      = "../modules/app/files/puma.service"
-      destination = "/tmp/puma.service"
-  }
-
-  provisioner "remote-exec" {
-      inline = [
-        "sed 's/Environment=/Environment=DATABASE_URL=${var.db_ip}:27017/' /tmp/puma.service -i",
-        "bash /tmp/deploy.sh",
-      ]
-  }
+//  connection {
+//    type  = "ssh"
+//    user  = "alexmar"
+//    private_key = "${file(var.private_key_path)}"
+//    host  = "${google_compute_address.app_ip.address}"
+//  }
+//
+//  provisioner "file" {
+//      source      = "../modules/app/files/deploy.sh"
+//      destination = "/tmp/deploy.sh"
+//  }
+//
+//  provisioner "file" {
+//      source      = "../modules/app/files/puma.service"
+//      destination = "/tmp/puma.service"
+//  }
+//
+//  provisioner "remote-exec" {
+//      inline = [
+//        "sed 's/Environment=/Environment=DATABASE_URL=${var.db_ip}:27017/' /tmp/puma.service -i",
+//        "bash /tmp/deploy.sh",
+//      ]
+//  }
 }
 
 resource "google_compute_address" "app_ip" {
