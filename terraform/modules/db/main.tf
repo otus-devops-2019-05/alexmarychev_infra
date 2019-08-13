@@ -19,19 +19,19 @@ resource "google_compute_instance" "db" {
     ssh-keys = "alexmar:${file(var.public_key_path)}"
   }
 
-  connection {
-    type  = "ssh"
-    user  = "alexmar"
-    private_key = "${file(var.private_key_path)}"
-    host  = "${google_compute_instance.db.network_interface.0.access_config.0.nat_ip}"
-  }
-
-  provisioner "remote-exec" {
-      inline = [
-        "sudo sed 's/bindIp: 127.0.0.1/bindIp: ${google_compute_instance.db.network_interface.0.network_ip}/' /etc/mongod.conf -i",
-        "sudo systemctl restart mongod",
-      ]
-  }
+//  connection {
+//    type  = "ssh"
+//    user  = "alexmar"
+//    private_key = "${file(var.private_key_path)}"
+//    host  = "${google_compute_instance.db.network_interface.0.access_config.0.nat_ip}"
+//  }
+//
+//  provisioner "remote-exec" {
+//      inline = [
+//        "sudo sed 's/bindIp: 127.0.0.1/bindIp: ${google_compute_instance.db.network_interface.0.network_ip}/' /etc/mongod.conf -i",
+//        "sudo systemctl restart mongod",
+//      ]
+//  }
 }
 
 # Правило firewall
