@@ -12,7 +12,7 @@
   template:
     src: db_config.j2
     dest: /home/alexmar/db_config
-    owner: alexmar      
+    owner: alexmar
     group: alexmar
 - name: enable puma
   systemd: name=puma enabled=yes
