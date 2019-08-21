@@ -6,4 +6,5 @@
 variables.json
 *.retry
 inventory.gcp.yml
+jdauphant.nginx/
 
